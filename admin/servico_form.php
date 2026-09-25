@@ -1,0 +1,14 @@
+<?php
+require_once __DIR__ . '/../config/auth.php'; require_admin();
+$id=filter_input(INPUT_GET,'id',FILTER_VALIDATE_INT); $s=['nome'=>'','categoria'=>'','bairro'=>'','endereco'=>'','telefone'=>'','descricao'=>'','latitude'=>'','longitude'=>'','status'=>'ativo'];
+if($id){$st=$pdo->prepare("SELECT * FROM servicos WHERE id=?");$st->execute([$id]);$s=$st->fetch()?:$s;}
+if($_SERVER['REQUEST_METHOD']==='POST'){
+ verify_csrf();
+ $v=[trim($_POST['nome']??''),trim($_POST['categoria']??''),trim($_POST['bairro']??''),trim($_POST['endereco']??''),trim($_POST['telefone']??''),trim($_POST['descricao']??''),$_POST['latitude']!==''?$_POST['latitude']:null,$_POST['longitude']!==''?$_POST['longitude']:null,$_POST['status']??'ativo'];
+ if($id){$st=$pdo->prepare("UPDATE servicos SET nome=?,categoria=?,bairro=?,endereco=?,telefone=?,descricao=?,latitude=?,longitude=?,status=? WHERE id=?");$v[]=$id;$st->execute($v);}
+ else {$st=$pdo->prepare("INSERT INTO servicos(nome,categoria,bairro,endereco,telefone,descricao,latitude,longitude,status) VALUES(?,?,?,?,?,?,?,?,?)");$st->execute($v);}
+ header('Location: index.php');exit;
+}
+?><!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Serviço</title><link rel="stylesheet" href="../assets/style.css"></head>
+<body><main class="section wrap"><div class="admin-head"><h1><?=$id?'Editar':'Novo'?> serviço</h1><a href="index.php">← Painel</a></div>
+<form method="post" class="form panel"><?=csrf_input()?><div class="grid2"><label>Nome<input name="nome" value="<?=htmlspecialchars($s['nome'])?>" required></label><label>Categoria<input name="categoria" value="<?=htmlspecialchars($s['categoria'])?>" required></label></div><div class="grid2"><label>Bairro<input name="bairro" value="<?=htmlspecialchars($s['bairro'])?>"></label><label>Telefone<input name="telefone" value="<?=htmlspecialchars($s['telefone'])?>"></label></div><label>Endereço<input name="endereco" value="<?=htmlspecialchars($s['endereco'])?>"></label><div class="grid2"><label>Latitude<input name="latitude" value="<?=htmlspecialchars($s['latitude'])?>" placeholder="-3.10"></label><label>Longitude<input name="longitude" value="<?=htmlspecialchars($s['longitude'])?>" placeholder="-60.02"></label></div><label>Descrição<textarea name="descricao" rows="6"><?=htmlspecialchars($s['descricao'])?></textarea></label><label>Status<select name="status"><option value="ativo" <?=$s['status']==='ativo'?'selected':''?>>Ativo</option><option value="inativo" <?=$s['status']==='inativo'?'selected':''?>>Inativo</option></select></label><button class="btn">Salvar</button></form></main></body></html>
