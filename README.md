@@ -47,9 +47,3 @@ git branch -M main
 git remote add origin https://github.com/SEU-USUARIO/conexao-azul-manaus.git
 git push -u origin main
 ```
-
-## Observação acadêmica e privacidade
-Os serviços incluídos no SQL são **demonstrativos**. Substitua-os por informações reais previamente verificadas antes de apresentar a plataforma como fonte comunitária. Não cadastre dados médicos ou dados pessoais de crianças. O formulário de sugestão deve receber apenas informações sobre o serviço/instituição e, opcionalmente, contato do adulto que envia a indicação.
-
-## Evidências para a UNINTER
-Na entrega final, use o endereço público do repositório GitHub como evidência do código. Grave também um vídeo curto mostrando a plataforma funcionando e sua aplicação real à comunidade, conforme as orientações da disciplina. Não substitua a evidência de aplicação comunitária por dados fictícios.
